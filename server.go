@@ -9,7 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/o-t-k-t/gqlgen_exercise/graph"
 	"github.com/o-t-k-t/gqlgen_exercise/graph/generated"
-	"github.com/o-t-k-t/gqlgen_exercise/storage"
+	"github.com/o-t-k-t/gqlgen_exercise/loader"
 )
 
 const defaultPort = "8080"
@@ -20,11 +20,11 @@ func main() {
 		port = defaultPort
 	}
 
-	loader := storage.NewDataloader()
+	dl := loader.NewDataloader()
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
-	dataloaderSrv := storage.Middleware(loader, srv)
+	dataloaderSrv := loader.Middleware(dl, srv)
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", dataloaderSrv)
