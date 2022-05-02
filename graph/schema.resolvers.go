@@ -10,6 +10,7 @@ import (
 
 	"github.com/o-t-k-t/gqlgen_exercise/graph/generated"
 	"github.com/o-t-k-t/gqlgen_exercise/graph/model"
+	"github.com/o-t-k-t/gqlgen_exercise/storage"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
@@ -27,9 +28,7 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 }
 
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	fmt.Printf("Called func (r *todoResolver) User %+v", obj)
-	fmt.Println()
-	return &model.User{ID: obj.UserID, Name: "user " + obj.UserID}, nil
+	return storage.GetUser(ctx, obj.UserID)
 }
 
 // Mutation returns generated.MutationResolver implementation.
