@@ -1,4 +1,4 @@
-package loader
+package storage
 
 // import graph gophers with your other imports
 import (
